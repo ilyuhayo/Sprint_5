@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from locators import StellarBurgersLocators
 
 class TestStellarBurgers:
 
@@ -13,24 +14,27 @@ class TestStellarBurgers:
     def teardown_method(self):
         self.driver.quit()
 
-    def test_login_and_navigation(self):
+    def test_go_to_sauces_tab(self):
         WebDriverWait(self.driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "BurgerIngredients_ingredients__1N8v2"))
+            EC.presence_of_element_located((StellarBurgersLocators.MAKE_BURGER_CONSTRUCTOR_BACKGROUND))
         )
-        self.driver.find_element(By.XPATH,
-                                 "//span[@class='text text_type_main-default' and contains(text(),'Соусы')]").click()
-        sauces_header = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH,
-                                                                                              "//h2[contains(@class, 'text text_type_main-medium mb-6 mt-10') and contains(text(), 'Соусы')]")))
+        self.driver.find_element(*StellarBurgersLocators.SAUCES_TAB).click()
+        sauces_header = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((StellarBurgersLocators.SAUCES_CONSTRUCTOR_HEADER)))
         assert "Соусы" in sauces_header.text
 
-        self.driver.find_element(By.XPATH,
-                                 "//span[@class='text text_type_main-default' and contains(text(),'Начинки')]").click()
-        fillings_header = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH,
-                                                                                              "//h2[contains(@class, 'text text_type_main-medium mb-6 mt-10') and contains(text(), 'Начинки')]")))
+    def test_go_to_fillings_tab(self):
+        self.driver.find_element(*StellarBurgersLocators.FILLINGS_TAB).click()
+        fillings_header = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((StellarBurgersLocators.FILLINGS_CONSTRUCTOR_HEADER)))
         assert "Начинки" in fillings_header.text
 
-        self.driver.find_element(By.XPATH,
-                                 "//span[@class='text text_type_main-default' and contains(text(),'Булки')]").click()
-        buns_header = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH,
-                                                                                          "//h2[contains(@class, 'text text_type_main-medium mb-6 mt-10') and contains(text(), 'Булки')]")))
+    def test_go_to_buns_tabs(self):
+        WebDriverWait(self.driver, 5).until(
+            EC.presence_of_element_located((StellarBurgersLocators.MAKE_BURGER_CONSTRUCTOR_BACKGROUND))
+        )
+        self.driver.find_element(*StellarBurgersLocators.SAUCES_TAB).click()
+        sauces_header = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((StellarBurgersLocators.SAUCES_CONSTRUCTOR_HEADER)))
+        assert "Соусы" in sauces_header.text
+
+        self.driver.find_element(*StellarBurgersLocators.BUNS_TAB).click()
+        buns_header = WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((StellarBurgersLocators.BUNS_CONSTRUCTOR_HEADER)))
         assert "Булки" in buns_header.text

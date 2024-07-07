@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
+from locators import StellarBurgersLocators
 
 
 class TestLoginFromRecPage:
@@ -15,32 +16,28 @@ class TestLoginFromRecPage:
 
     def test_login_from_recovery(self):
         WebDriverWait(self.driver, 5).until(expected_conditions.element_to_be_clickable(
-            (By.XPATH, "//p[@class='AppHeader_header__linkText__3q_va ml-2' and text()='Личный Кабинет']")))
-        self.driver.find_element(By.XPATH,
-                                 "//p[@class='AppHeader_header__linkText__3q_va ml-2' and text()='Личный Кабинет']").click()
+            (StellarBurgersLocators.PERSONAL_AREA_BUTTON)))
+        self.driver.find_element(*StellarBurgersLocators.PERSONAL_AREA_BUTTON).click()
 
         WebDriverWait(self.driver, 5).until(expected_conditions.element_to_be_clickable(
-            (By.XPATH, "//a[@class='Auth_link__1fOlj' and text()='Восстановить пароль']")))
-        self.driver.find_element(By.XPATH, "//a[@class='Auth_link__1fOlj' and text()='Восстановить пароль']").click()
+            (StellarBurgersLocators.PASSWORD_RECOVERY_BUTTON)))
+        self.driver.find_element(*StellarBurgersLocators.PASSWORD_RECOVERY_BUTTON).click()
 
         WebDriverWait(self.driver, 5).until(expected_conditions.element_to_be_clickable(
-            (By.XPATH, "//a[@class='Auth_link__1fOlj' and text()='Войти']")))
-        self.driver.find_element(By.XPATH, "//a[@class='Auth_link__1fOlj' and text()='Войти']").click()
+            (StellarBurgersLocators.LOGIN_BUTTON_REС)))
+        self.driver.find_element(*StellarBurgersLocators.LOGIN_BUTTON_REС).click()
 
         WebDriverWait(self.driver, 5).until(
-            expected_conditions.presence_of_element_located((By.XPATH, "//div[@class='Auth_login__3hAey']")))
+            expected_conditions.presence_of_element_located((StellarBurgersLocators.AUTHORIZATION_FORM_BACKGROUND)))
 
-        self.driver.find_element(By.XPATH,
-                                 "//input[@class='text input__textfield text_type_main-default' and @name='name']").send_keys(
+        self.driver.find_element(*StellarBurgersLocators.EMAIL_FIELD_LOG).send_keys(
             "ebashutest@mail.ru")
-        self.driver.find_element(By.XPATH,
-                                 "//input[@class='text input__textfield text_type_main-default' and @name='Пароль']").send_keys(
+        self.driver.find_element(*StellarBurgersLocators.PASSWORD_FIELD_LOG).send_keys(
             "123456")
-        self.driver.find_element(By.XPATH,
-                                 "//button[@class='button_button__33qZ0 button_button_type_primary__1O7Bx button_button_size_medium__3zxIa']").click()
+        self.driver.find_element(*StellarBurgersLocators.LOGIN_BUTTON_LOG).click()
 
         WebDriverWait(self.driver, 5).until(
-            expected_conditions.presence_of_element_located((By.CLASS_NAME, "App_componentContainer__2JC2W")))
+            expected_conditions.presence_of_element_located((StellarBurgersLocators.PAGE_BACKGROUND)))
         make_order_button = WebDriverWait(self.driver, 5).until(
-            expected_conditions.element_to_be_clickable((By.XPATH, "//button[text()='Оформить заказ']"))).text
+            expected_conditions.element_to_be_clickable((StellarBurgersLocators.CHECKOUT_BUTTON))).text
         assert "Оформить заказ" in make_order_button
